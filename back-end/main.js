@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import { connectDB } from './src/libs/db.lib.js';
 import AuthRouter from './src/routes/auth.route.js';
 import MessageRouter from './src/routes/message.route.js';
@@ -11,6 +12,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors())
 
 app.use("/api/auth", AuthRouter);
 app.use("/api/message", MessageRouter);

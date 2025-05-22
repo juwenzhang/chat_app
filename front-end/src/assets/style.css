@@ -1,0 +1,10 @@
+@unocss preflights;
+@unocss default;
+@unocss;
+@import "normalize.css";
+
+body {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
