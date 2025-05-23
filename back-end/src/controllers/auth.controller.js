@@ -11,6 +11,7 @@ const __dirname = path.dirname(__filename);
 
 export const AuthSignup = async (req, res) => {
   const { fullName, email, password } = req.body;
+  console.log("signup req.body: ", req.body)
   try {
     if (!fullName || !email || !password) {
       return res.status(400).json({ message: "please fill in all fields" });
@@ -85,7 +86,7 @@ export const AuthUploadProfile = async (req, res) => {
       console.log('尝试上传到 Cloudinary，使用文件 buffer');
       const uploadResponse = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream({
-          resource_type: 'image'
+          resource_type: 'auto'
         }, (error, result) => {
           if (error) {
             reject(error);

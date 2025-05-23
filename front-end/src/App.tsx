@@ -1,16 +1,55 @@
-import React from 'react'
+import React, { Suspense } from 'react';
+import NavBar from '@/components/NavBar';
+import HomePage from '@/pages/HomePage';
+import SignupPage from '@/pages/SignupPage';
+import LoginPage from '@/pages/LoginPage';
+import SettingsPage from '@/pages/SettingsPage';
+import ProfilePage from '@/pages/ProfilePage';
+import AppLoading from './components/AppLoading';
+import AppError from './components/AppError';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuthStore } from './store/useAuthStore';
+import { useFetch } from './hooks/useFetch';
 
-function App() {
-  return (
-    <React.Fragment>
-      <div className="inline-block h-164 bg-#F2F3F5 rounded-4 p-20 pt-16!">
-        <div className="mb-8 text-14 text-#7A8699">示例（请按照示例上传真实、有效的集装箱照片）：</div>
-        <div className="f-s">
-          <div className="absolute bottom-0 w-full f-c bg-#1D2129/80 text-white text-12"></div>
-        </div>
-      </div>
-    </React.Fragment>
-  )
+interface AppProps {
+  children?: React.ReactNode
 }
 
-export default App
+const App: React.FC<AppProps> = () => {
+  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
+  const { isError, isLoading } = useFetch("auth", checkAuth, {})
+  // const navigate = useNavigate();
+  // const location = useLocation();
+  // const routerJump = (path: string) => {
+  //   if (location.pathname !== path) {
+  //     navigate(path);
+  //   }
+  // }
+  if (isLoading) return <AppLoading />
+  if (isError) return <AppError />
+  if (isCheckingAuth && !authUser) {
+    return <AppLoading />
+  }
+
+  return (
+    <React.Fragment>
+      <NavBar />
+      <Suspense fallback={<AppLoading />}>
+        {/* you also can use useRoutes Hooks and routes config 
+            to complete router config realise: 
+              e.g.: const router = useRoutes(routesConfig) 
+                rootRoute we use router(need to e.g. to get) to render
+                but children routes we use Outlet(do not need to get) to render
+        */}
+        <Routes>
+          <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login"/>} />
+          <Route path="/signup" element={!authUser ? <SignupPage /> : <Navigate to="/"/>} />
+          <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/"/>} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+        </Routes>
+      </Suspense>
+    </React.Fragment>
+  )
+};
+export default App;
