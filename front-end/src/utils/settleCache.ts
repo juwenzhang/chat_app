@@ -42,5 +42,4 @@ class SettleCache {
 
 const localStorageCache = new SettleCache(localStorage)
 const sessionStorageCache = new SettleCache(sessionStorage)
-
 export { localStorageCache, sessionStorageCache }

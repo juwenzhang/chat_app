@@ -10,6 +10,7 @@ import AppError from './components/AppError';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/useAuthStore';
 import { useFetch } from './hooks/useFetch';
+import { Toaster } from 'react-hot-toast';
 
 interface AppProps {
   children?: React.ReactNode
@@ -17,7 +18,7 @@ interface AppProps {
 
 const App: React.FC<AppProps> = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
-  const { isError, isLoading } = useFetch("auth", checkAuth, {})
+  const { isError, isLoading } = useFetch("auth/check", checkAuth, {})
   // const navigate = useNavigate();
   // const location = useLocation();
   // const routerJump = (path: string) => {
@@ -27,10 +28,8 @@ const App: React.FC<AppProps> = () => {
   // }
   if (isLoading) return <AppLoading />
   if (isError) return <AppError />
-  if (isCheckingAuth && !authUser) {
-    return <AppLoading />
-  }
-
+  if (isCheckingAuth && !authUser) return <AppLoading />
+  
   return (
     <React.Fragment>
       <NavBar />
@@ -43,12 +42,15 @@ const App: React.FC<AppProps> = () => {
         */}
         <Routes>
           <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login"/>} />
-          <Route path="/signup" element={!authUser ? <SignupPage /> : <Navigate to="/"/>} />
-          <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/"/>} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Suspense>
+
+      <Toaster />
     </React.Fragment>
   )
 };

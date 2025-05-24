@@ -32,13 +32,13 @@ export const AuthSignup = async (req, res) => {
     const newUser = new UserModel({ fullName, email, password: hashPassword });
     if (newUser) {
       // generate jwt token to front-end to use
-      const token = generateToken(newUser._id, res);
+      // const token = generateToken(newUser._id, res);
       await newUser.save();  // save new user to database
-      return res.status(201).json({ message: "user created successfully", token });  
+      return res.status(201).json({ message: "user created successfully", status: "ok"/*token*/ });  
     }
   } catch (error) {
     console.log("signup error: ", error.message || "internal server error")
-    return res.status(500).json({ message: "internal server error" });
+    return res.status(500).json({ message: "internal server error", status: "no" });
   }
 }
 
@@ -61,20 +61,21 @@ export const AuthLogin = async (req, res) => {
       fullName: user.fullName,
       email: user.email,
       profilePic: user.profilePic, 
+      status: "ok"
     });
   } catch (error) {
     console.log("login error: ", error.message || "internal server error")
-    return res.status(500).json({ message: "internal server error" });
+    return res.status(500).json({ message: "internal server error", status: "no" });
   }  
 }
 
 export const AuthLogout = (req, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });  // clear cookie from front-end
-    return res.status(200).json({ message: "logout successfully" });
+    return res.status(200).json({ message: "logout successfully", status: "ok" });
   } catch (error) {
     console.log("logout error: ", error.message || "internal server error")
-    return res.status(500).json({ message: "internal server error" });  
+    return res.status(500).json({ message: "internal server error", status: "no" });  
   }
 }
 
@@ -140,12 +141,11 @@ export const AuthUploadProfile = async (req, res) => {
   }
 }
 
-
 export const AuthCheck = async (req, res) => {
   try {
-    res.status(200).json({ message: "check successfully", user: req.user });
+    res.status(200).json({ message: "check successfully", user: req.user, status: "ok" });
   } catch (error) {
     console.log("check error: ", error.message || "internal server error")
-    return res.status(500).json({ message: "internal server error" });
+    return res.status(500).json({ message: "internal server error", status: "no" });
   }
 }
