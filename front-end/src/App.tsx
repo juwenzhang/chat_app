@@ -13,10 +13,11 @@ import { useFetch } from './hooks/useFetch';
 import { Toaster } from 'react-hot-toast';
 
 interface AppProps {
-  children?: React.ReactNode
+  children?: React.ReactNode,
+  theme: "light" | "dark";
 }
 
-const App: React.FC<AppProps> = () => {
+const App: React.FC<AppProps> = (props: AppProps) => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
   const { isError, isLoading } = useFetch("auth/check", checkAuth, {})
   // const navigate = useNavigate();
@@ -29,6 +30,7 @@ const App: React.FC<AppProps> = () => {
   if (isLoading) return <AppLoading />
   if (isError) return <AppError />
   if (isCheckingAuth && !authUser) return <AppLoading />
+  const { theme } = props;
   
   return (
     <React.Fragment>
@@ -41,15 +43,14 @@ const App: React.FC<AppProps> = () => {
                 but children routes we use Outlet(do not need to get) to render
         */}
         <Routes>
-          <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login"/>} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/" element={authUser ? <HomePage theme={theme} /> : <Navigate to="/login"/>} />
+          <Route path="/signup" element={<SignupPage theme={theme} />} />
+          <Route path="/login" element={<LoginPage theme={theme} />} />
+          <Route path="/settings" element={<SettingsPage theme={theme} />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Suspense>
-
       <Toaster />
     </React.Fragment>
   )

@@ -1,18 +1,21 @@
 import { create } from 'zustand'
-import { checkAuth, signUp, login, logout } from '@/libs/modules/auth'
+import { checkAuth, signUp, login, logout, upLoadProFile } from '@/libs/modules/auth'
 import { toast } from 'react-hot-toast'
 import { localStorageCache } from '@/utils/settleCache'
 
 interface AuthStateType {
-  authUser: null | string,
+  authUser: any,
   isCheckingAuth: boolean,
   isSignUp: boolean,
   isLoginIn: boolean,
   isUpdatingProfile: boolean,
+  onlineUsers: Array<any>,
+  changeAuthUser: (authUser: any) => void,
   checkAuth: () => void,
   signup: (fullName: string, email: string, password: string) => any,
   login: (email: string, password: string) => any,
   logout: () => any,
+  upLoadProFile: (file: File) => any,
 }
 
 export const useAuthStore = create<AuthStateType>((set) => ({
@@ -21,6 +24,15 @@ export const useAuthStore = create<AuthStateType>((set) => ({
   isSignUp: false,
   isLoginIn: false,
   isUpdatingProfile: false,
+  onlineUsers: [],
+
+  changeAuthUser: async (authUser: any) => { 
+    set({ authUser }) 
+    if (localStorageCache.hasCache("user")) {
+      localStorageCache.removeCache("user");
+    }
+    localStorageCache.setCache("user", JSON.stringify(authUser));
+  },
 
   checkAuth: async () => { 
     try {
@@ -73,6 +85,8 @@ export const useAuthStore = create<AuthStateType>((set) => ({
       if (error instanceof Error) {
         toast.error('Login failed' + error.message)
       }
+    } finally {
+      set({ isLoginIn: false })
     }
   },
 
@@ -92,6 +106,23 @@ export const useAuthStore = create<AuthStateType>((set) => ({
       set({ isLoginIn: false })
       set({ isCheckingAuth: false })
       set({ isSignUp: false })
+      set({ isUpdatingProfile: false })
+    }
+  },
+
+  upLoadProFile: async (file: File) => {
+    try {
+      set({ isUpdatingProfile: true })
+      const res = await upLoadProFile(file)
+      if (res.status === "ok") {
+        toast.success('UpLoad profile successfully')
+      }
+      return res
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error('UpLoad profile failed' + error.message)
+      }
+    } finally {
       set({ isUpdatingProfile: false })
     }
   }

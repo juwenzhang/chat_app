@@ -1,10 +1,10 @@
 import bcrypt from "bcryptjs";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
-import { generateToken } from "../libs/utils.lib.js";
 import UserModel from "../models/user.model.js";
 import cloudinary from "../libs/cloudinary.lib.js";
+import { fileURLToPath } from "url";
+import { generateToken } from "../libs/utils.lib.js";
 
 const __filename = fileURLToPath(import.meta.url);  
 const __dirname = path.dirname(__filename); 
@@ -61,6 +61,8 @@ export const AuthLogin = async (req, res) => {
       fullName: user.fullName,
       email: user.email,
       profilePic: user.profilePic, 
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
       status: "ok"
     });
   } catch (error) {
@@ -105,7 +107,8 @@ export const AuthUploadProfile = async (req, res) => {
       );
       res.status(200).json({
         message: "profile uploaded successfully",
-        profilePic: updateUser.profilePic
+        profilePic: updateUser.profilePic,
+        status: "ok"
       });
     } catch (cloudinaryError) {
       console.log("Cloudinary 上传失败，尝试本地备份: ", cloudinaryError.message);
@@ -128,16 +131,17 @@ export const AuthUploadProfile = async (req, res) => {
         // 移除多余的 save 调用
         res.status(200).json({
           message: "profile 已成功备份到本地静态资源",
-          profilePic: updateUser.profilePic
+          profilePic: updateUser.profilePic,
+          status: "ok",
         });
       } catch (backupError) {
         console.log("本地备份失败: ", backupError.message);
-        res.status(503).json({ message: "所有存储服务暂时不可用，请稍后重试" });
+        res.status(503).json({ message: "所有存储服务暂时不可用，请稍后重试", status: "no"  });
       }
     }
   } catch (error) {
     console.log("upload profile error: ", error.message || "internal server error")
-    return res.status(500).json({ message: "internal server error" });
+    return res.status(500).json({ message: "internal server error", status: "no" });
   }
 }
 

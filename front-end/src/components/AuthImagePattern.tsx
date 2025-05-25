@@ -1,27 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 interface AuthImagePatternProps {
   children?: React.ReactNode;
   title: string;
   subtitle: string;
+  theme: "light" | "dark"; 
 }
 
 const AuthImagePattern: React.FC<AuthImagePatternProps> = (props: AuthImagePatternProps) => {
-  const { title, subtitle } = props;
-  const [colors, setColors] = useState({
-    even: "#b4cdf5",
-    odd: "#81a1d5"
-  });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setColors(prevColors => ({
-        even: prevColors.odd,
-        odd: prevColors.even
-      }));
-    }, 5000); 
-    return () => clearInterval(timer);
-  }, []);
+  const { title, subtitle, theme } = props;
+  const themeGroup = {
+    light: {
+      even: "#b4cdf5",
+      odd: "#81a1d5"
+    },
+    dark: {
+      even: "#060606",
+      odd: "#3a3939"
+    }
+  }
+  // const [colors, setColors] = useState(themeGroup[props.theme || "light"]);
 
   return (
     <React.Fragment>
@@ -34,7 +32,7 @@ const AuthImagePattern: React.FC<AuthImagePatternProps> = (props: AuthImagePatte
                   key={i} 
                   className="aspect-square rounded-lg" 
                   style={{
-                    backgroundColor: i % 2 === 0 ? colors.even : colors.odd,
+                    backgroundColor: i % 2 === 0 ? themeGroup[theme].even : themeGroup[theme].odd,
                     transition: 'background-color 1s ease',
                     opacity: 0.5, 
                   }}

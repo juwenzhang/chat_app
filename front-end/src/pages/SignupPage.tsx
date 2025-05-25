@@ -4,6 +4,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useFetch } from '@/hooks/useFetch';
 import { useNavigate, Link } from 'react-router-dom';
 import { MessageSquare, User, Mail, Lock, EyeOff, Eye, Loader2 } from 'lucide-react';
+import { leftSideBackgroundStyle, rightSideBackgroundStyle } from '@/constants/theme';
 import AuthImagePattern from '@/components/AuthImagePattern';
 import AppLoading from '@/components/AppLoading';
 import AppError from '@/components/AppError';
@@ -11,9 +12,10 @@ import TipModel from '@/components/TipModel';
 
 interface SignupPageProps {
   children?: React.ReactNode;
+  theme: "light" | "dark";
 }
 
-const SignupPage: React.FC<SignupPageProps> = () => {
+const SignupPage: React.FC<SignupPageProps> = (props: SignupPageProps) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showTip, setShowTip] = useState({ show: false, title: '' });
@@ -32,7 +34,7 @@ const SignupPage: React.FC<SignupPageProps> = () => {
     refetchOnMount: false,
     refetchOnReconnect: false,  
   });
-
+  const { theme } = props;
   const validateForm = () => {
     const { fullName, email, password } = formData;
     if (!fullName || !email || !password) {
@@ -75,7 +77,7 @@ const SignupPage: React.FC<SignupPageProps> = () => {
         {/* left sider part */}
         <div className='flex flex-col justify-center items-center p-4 sm:p-8 bg-gray-300 rounded-lg 
         shadow-md md:h-[80vh] h-screen box-border' style={{ 
-          backgroundImage: 'linear-gradient(135deg, #d0daeb 0%, #c6daf8 25%, #b4cdf5 50%, #81a1d5 75%, #5f98fc 100%)' 
+          backgroundImage: `${leftSideBackgroundStyle[theme]}`, 
         }}>
           <div className='w-full max-w-sm space-y-4'>
             <div className='text-center mb-4'>
@@ -160,7 +162,7 @@ const SignupPage: React.FC<SignupPageProps> = () => {
                 <button
                   type="button"
                   className='bg-transparent border-0 absolute inset-y-0 right-0 flex items-center justify-center px-3 
-                  text-gray-400 hover:text-gray-600 transition-colors duration-300'
+                  text-gray-400 hover:text-gray-600 transition-colors duration-300 box-border'
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword 
@@ -173,8 +175,8 @@ const SignupPage: React.FC<SignupPageProps> = () => {
 
             <button
               type="submit"
-              className='btn w-full h-8 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 
-                text-white rounded-lg transition-all duration-300 border-none shadow-md hover:shadow-lg text-sm'
+              className='btn w-full h-8 rounded-lg transition-all duration-300 border-none shadow-md 
+              hover:shadow-lg text-sm border-none box-border'
               disabled={isSignUp}
             >
               {
@@ -198,10 +200,11 @@ const SignupPage: React.FC<SignupPageProps> = () => {
         {/* right side part */}
         <div className='flex flex-col justify-center items-center p-4 sm:p-8 bg-gray-300 rounded-lg 
         shadow-md md:h-[80vh] h-screen box-border' style={{ 
-          backgroundImage: 'linear-gradient(135deg, #5f98fc 0%, #81a1d5 25%, #b4cdf5 50%, #c6daf8 75%, #d0daeb 100%)',
+          backgroundImage: `${rightSideBackgroundStyle[theme]}`,
         }}>
           <AuthImagePattern 
             title="加入社区/JOIN OUR COMMUNITY" 
+            theme={theme}
             subtitle="欢迎来到我们的社区，成为我们的一员，与我们一起成长/Welcome to our community, join us and grow together." 
           /> 
         </div>

@@ -32,3 +32,14 @@ export const logout = async () => {
     url: '/auth/logout',
   })
 }
+
+export const upLoadProFile = async (
+  file: File
+) => {
+  const formData = new FormData()
+  formData.append('profilePic', file)
+  return await request.put({
+    url: '/auth/upload-profile',
+    data: formData,
+  })
+}

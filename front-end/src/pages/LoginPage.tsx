@@ -3,13 +3,15 @@ import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { useAuthStore } from '@/store/useAuthStore';
 import { Mail, Lock, EyeOff, Eye, MessageSquare, Loader2 } from 'lucide-react';
+import { leftSideBackgroundStyle, rightSideBackgroundStyle } from '@/constants/theme';
 import AuthImagePattern from '@/components/AuthImagePattern';
 
 interface LoginPageProps {
   children?: React.ReactNode;
+  theme: "light" | "dark";
 }
 
-const LoginPage: React.FC<LoginPageProps> = () => {
+const LoginPage: React.FC<LoginPageProps> = (props: LoginPageProps) => {
   const [showPassword, setShowPassword] = useState(false); 
   const [formData, setFormData] = useState({
     email: '',
@@ -17,6 +19,8 @@ const LoginPage: React.FC<LoginPageProps> = () => {
   });
   const { login, isLoginIn } = useAuthStore();
   const navigate = useNavigate();
+
+  const { theme } = props;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,7 +43,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
         {/* left sider part */}
         <div className='flex flex-col justify-center items-center p-4 sm:p-8 bg-gray-300 rounded-lg 
         shadow-md box-border md:h-[80vh] h-screen' style={{ 
-          backgroundImage: 'linear-gradient(135deg, #d0daeb 0%, #c6daf8 25%, #b4cdf5 50%, #81a1d5 75%, #5f98fc 100%)' 
+          backgroundImage: `${leftSideBackgroundStyle[theme]}`,
         }}>
           <div className='w-full max-w-sm space-y-4'>
             <div className='text-center mb-4'>
@@ -67,7 +71,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
                 <input
                   type="email"
                   id="email"
-                  className='bg-blue-2 w-full h-8 pl-8 rounded-lg border border-gray-300 
+                  className='w-full h-8 pl-8 rounded-lg border border-gray-300 
                     focus:outline-none focus:border-primary 
                   focus:ring-2 focus:ring-primary/20 hover:border-gray-400 
                   transition-all duration-300 text-sm'
@@ -90,7 +94,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   id='password'
-                  className='bg-blue-2 w-full h-8 pl-8 pr-8 rounded-lg border border-gray-300 
+                  className='w-full h-8 pl-8 pr-8 rounded-lg border border-gray-300 
                     focus:outline-none focus:border-primary 
                   focus:ring-2 focus:ring-primary/20 hover:border-gray-400 transition-all
                      duration-300 text-sm'
@@ -101,7 +105,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
                 <button
                   type="button"
                   className='bg-transparent border-0 absolute inset-y-0 right-0 flex items-center justify-center px-3 
-                  text-gray-400 hover:text-gray-600 transition-colors duration-300'
+                  text-gray-400 hover:text-gray-600 transition-colors duration-300 box-border'
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword 
@@ -114,8 +118,8 @@ const LoginPage: React.FC<LoginPageProps> = () => {
 
             <button
               type="submit"
-              className='btn w-full h-8 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 
-                text-white rounded-lg transition-all duration-300 border-none shadow-md hover:shadow-lg text-sm'
+              className='btn w-full h-8 rounded-lg transition-all duration-300 border-none 
+              shadow-md hover:shadow-lg text-sm'
               disabled={isLoginIn}
             >
               {
@@ -139,9 +143,10 @@ const LoginPage: React.FC<LoginPageProps> = () => {
         {/* right side part */}
         <div className='flex flex-col justify-center items-center p-4 sm:p-8 bg-gray-300 rounded-lg 
         shadow-md box-border md:h-[80vh] h-screen' style={{ 
-          backgroundImage: 'linear-gradient(135deg, #5f98fc 0%, #81a1d5 25%, #b4cdf5 50%, #c6daf8 75%, #d0daeb 100%)',
+          backgroundImage: `${rightSideBackgroundStyle[theme]}`,
         }}>
           <AuthImagePattern 
+            theme={theme}
             title="加入社区/JOIN OUR COMMUNITY" 
             subtitle="欢迎来到我们的社区，成为我们的一员，与我们一起成长/Welcome to our community, join us and grow together." 
           /> 

@@ -24,5 +24,19 @@ export default defineConfig({
         'vertical-align': 'middle',
       },
     }),
-  ]
+  ],
+
+  theme: {
+    extend: {
+      utilities: {
+        'scrollbar-hide': {
+          '-ms-overflow-style': 'none',
+          'scrollbar-width': 'none',
+        },
+        'scrollbar-hide::-webkit-scrollbar': {
+          "display": 'none',
+        }
+      }
+    }
+  }
 })

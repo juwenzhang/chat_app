@@ -8,10 +8,10 @@ export const getUsersForSideBar = async (req, res) => {
     const filteredUsers = await UserModel.find({
       _id: { $ne: loggedInUserId }
     }).select("-password");  // do not contain password in response result
-    res.status(200).json({ users: filteredUsers });
+    res.status(200).json({ users: filteredUsers, status: "ok" });
   } catch (error) {
     console.log("get users for sidebar error: ", error.message || "internal server error")
-    return res.status(500).json({ message: "internal server error" });
+    return res.status(500).json({ message: "internal server error", status: "no" });
   }
 }
 
@@ -28,10 +28,10 @@ export const getMessagesForUser = async (req, res) => {
         { senderId: userToChatId, receiverId: senderId }
       ]
     })
-    res.status(200).json({ messages });
+    res.status(200).json({ messages, status: "ok" });
   } catch (error) {
     console.log("get messages for user error: ", error.message || "internal server error")
-    return res.status(500).json({ message: "internal server error" });
+    return res.status(500).json({ message: "internal server error", status: "no" });
   }
 }
 
@@ -55,9 +55,9 @@ export const sendMessage = async (req, res) => {
     });
     await newMessage.save();
 
-    res.status(201).json({ message: "message sent successfully", newMessage });
+    res.status(201).json({ message: "message sent successfully", newMessage, status: "ok" });
   } catch (error) {
     console.log("send message error: ", error.message || "internal server error")
-    return res.status(500).json({ message: "internal server error" });
+    return res.status(500).json({ message: "internal server error", status: "no" });
   }
 }

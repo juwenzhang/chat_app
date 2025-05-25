@@ -3,6 +3,89 @@
 @unocss default;
 @unocss;
 
+:root {
+  --light-bg-color: linear-gradient(135deg, #d0daeb 0%, #c6daf8 25%, #b4cdf5 50%, #81a1d5 75%, #5f98fc 100%);
+  --light-bg-nx-color: linear-gradient(135deg, #5f98fc 0%, #81a1d5 25%, #b4cdf5 50%, #c6daf8 75%, #d0daeb 100%);
+  --dark-bg-color: linear-gradient(135deg, #060606 0%, #3a3939 25%, #7d7b7b 50%, #7f7979 75%, #979191 100%);
+  --dark-bg-nx-color: linear-gradient(135deg, #979191 0%, #7f7979 25%, #7d7b7b 50%, #3a3939 75%, #060606 100%);
+}
+
+body.light-theme {
+  background-image: var(--light-bg-color);
+  color: rgb(41, 40, 39);
+  a {
+    text-decoration: none;
+    color: #7168e5;
+  }
+
+  input {
+    background-color: #d4d2d2;
+    color: rgb(41, 40, 39);
+  }
+
+  button {
+    background-color: #1e74d6;
+    color: rgb(41, 40, 39);
+  }
+
+  button[type="button"] {
+    background-color: transparent;
+    color: rgb(41, 40, 39);
+  }
+
+  button[datatype="toggle"], button[datatype="logout"] {
+    background-color: transparent;
+    color: rgb(41, 40, 39);
+  }
+
+  button[datatype="toggle"]:hover, button[datatype="logout"]:hover {
+    background-color: #abbee1;
+  }
+
+  button:hover {
+    background-color: #4d89f5;
+  }
+
+}
+
+body.dark-theme {
+  background-image: var(--dark-bg-color);
+  color: white;
+
+  a {
+    text-decoration: none;
+    color: #dad9de;
+  }
+
+  input {
+    background-color: #5f5d5d;
+    color: white;
+  }
+
+  button {
+    background-color: #5f5d5d;
+    color: white;
+  }
+
+  button[type="button"] {
+    background-color: transparent;
+    color: white;
+  }
+
+  button[datatype="toggle"], button[datatype="logout"] {
+    background-color: transparent;
+    color: white;
+  }
+
+  button[datatype="toggle"]:hover, button[datatype="logout"]:hover {
+    background-color: #818080;
+  }
+
+  button:hover {
+    background-color: #818080;
+  }
+}
+
 body {
   padding: 0;
   margin: 0;
@@ -10,12 +93,10 @@ body {
   background-color: #d4d2d2;
   box-sizing: border-box;
   width: 100%;
-  /* height: 100vh; */
   min-height: 100vh;
-  background-image: linear-gradient(135deg, #d0daeb 0%, #c6daf8,25%,#b4cdf5 50%, #81a1d5, 75%, #5f98fc 100%);
   background-repeat: no-repeat;
   user-select: none;
-  /* vertical-align: middle; */
+  transition: all 0.5s ease-in-out;
 }
 
 * {
@@ -25,7 +106,16 @@ body {
   box-sizing: border-box;
 }
 
-a {
-  text-decoration: none;
-  color: #1f12ce;
+.scrollbar-hidden {
+  overflow-y: auto;
+  scrollbar-width: none; /* 适用于 Firefox */
+  -ms-overflow-style: none; /* 适用于 IE 和 Edge */
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* 适用于 Chrome, Safari 和 Opera */
+}
+
+aside::-webkit-scrollbar {
+  display: none; /* 适用于 Chrome, Safari 和 Opera */
 }
