@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from'react'
 import { useAuthStore } from '@/store/useAuthStore';
 import { Camera, User, Mail } from 'lucide-react';
 import { useTheme } from '@/context/themeContext';
-import { leftSideBackgroundStyle as BackgroundStyle } from '@/constants/theme';
+import { rightSideBackgroundStyle as BackgroundStyle } from '@/constants/theme';
 import toast from 'react-hot-toast';
 
 interface ProfilePageProps {
@@ -97,13 +97,14 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = (e) => {
-      setSelectImage(e.target?.result as string);
+      if (e.target?.result) {
+        setSelectImage(e.target.result as string);
+      }
     };
     const res = await upLoadProFile(file);
     if (res.status === "ok" && res) {
-      const authUserProxy = { ...authUser };
-      authUserProxy.profilePic = res.profilePic;
-      await changeAuthUser(authUserProxy);
+      await changeAuthUser({ ...authUser, profilePic: res.profilePic }); 
+      setSelectImage(null); 
     }
   };
 

@@ -1,11 +1,12 @@
 import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import useChatStore from '@/store/useChatStore';
 import SideBarSkeletons from '@/components/SideBarSkeletons';
 import { User } from 'lucide-react';
 import AppError from '@/components/AppError';
 import { useFetch } from '@/hooks/useFetch';
 import { leftSideBackgroundStyle } from '@/constants/theme';
-import { localStorageCache } from '@/utils/settleCache';
+import { useAuthStore } from '@/store/useAuthStore';
 
 interface SideBarProps {
   children?: React.ReactNode;
@@ -14,14 +15,23 @@ interface SideBarProps {
 
 const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
   const { theme } = props;
-  const { users, selectUser, getUsers } = useChatStore();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { users, selectUser, getUsers, setSelectUser, resetAll } = useChatStore();
   const { isLoading, isError } = useFetch(
     'chat/users', 
     () => getUsers(), 
     { staleTime: 0 }
   );
   const defaultAvatar = new URL("@/assets/img.jpg", import.meta.url).href;
-  const onlineUsers: Array<any> = localStorageCache.getCache("onlineUsers") || [];
+  const { onlineUsers } = useAuthStore()
+
+  const returnHomeClickHandler = () => {
+    resetAll();
+    if (location.pathname === '/') {
+      navigate('/');
+    }
+  }
 
   const scrollbarHiddenStyle: {
     overflowY: 'auto';
@@ -40,6 +50,10 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
   if (isLoading) return <SideBarSkeletons />;
   if (isError) return <AppError />;
 
+  const handleClick = (user: any) => {
+    setSelectUser(user)
+  }
+
   return (
     <React.Fragment>
       <aside 
@@ -50,7 +64,10 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
         }}
       > 
         <div className='border-b border-base-300 w-full p-5'>
-          <div className='flex items-center gap-2'>
+          <div 
+            className='flex items-center gap-2'
+            onClick={returnHomeClickHandler}
+          >
             <User className='size-6'/>
             <span className='font-medium'>Contacts</span>
           </div>
@@ -65,6 +82,8 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
             return (
               <button
                 key={user['_id']}
+                onClick={() => handleClick(user)}
+                onDoubleClick={() => resetAll()}
                 className={`
                   w-full p-3 flex items-center gap-3 hover:bg-base-300 cursor-pointer
                   ${selectUser?._id === user._id ? 'bg-base-300 ring-1 ring-base-300' : ''}

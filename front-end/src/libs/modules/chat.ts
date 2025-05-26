@@ -6,8 +6,20 @@ export const getUserList = async () => {
   })
 }
 
-export const getMessageList = async (userId: string) => {
+export const getMessageList = async (
+  userId: string
+) => {
   return await request.get({
-    url: `/message/messages/${userId}`,
+    url: `/message/${userId}`,
+  })
+}
+
+export const sendMessage = async (
+  userId: string, 
+  data: any,
+) => {
+  return await request.post({
+    url: `/message/send/${userId}`,
+    data: { ...data },
   })
 }

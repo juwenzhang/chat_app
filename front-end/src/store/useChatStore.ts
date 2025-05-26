@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
-import { getUserList, getMessageList } from "@/libs/modules/chat";
+import { getUserList, getMessageList, sendMessage } from "@/libs/modules/chat";
 
 interface ChatStateType {
   message: Array<any>;
@@ -10,7 +10,9 @@ interface ChatStateType {
   isMessagesLoading: boolean;
   getUsers: () => Promise<any>;
   getMessages: (userId: string) => Promise<any>;
+  sendMessage: (userId: string, data: any) => Promise<any>;
   setSelectUser: (user: any) => Promise<any>;
+  resetAll: () => void;
 }
 
 const useChatStore = create<ChatStateType>((set) => ({
@@ -56,15 +58,35 @@ const useChatStore = create<ChatStateType>((set) => ({
     }
   },
 
+  sendMessage: async (userId: string, data: any) => {
+    try {
+      const res = await sendMessage(userId, data)
+      if (res.status === "ok") {
+        set((state) => ({ message: [...state.message, res.newMessage] }))
+      } else {
+        toast.error(res.message)
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error('发送消息失败' + error.message)
+      }
+    }
+  },
+
   setSelectUser: async (user: any) => {
     try {
       set({ selectUser: user })
-      toast.success('设置用户成功')
+      toast.success('请开始聊天吧')
     } catch (error) {
       if (error instanceof Error) {
         toast.error('设置用户失败' + error.message)
       }
     }
+  },
+
+  resetAll: () => {
+    set({ selectUser: null })
+    toast.success('请选择新用户开始聊天吧')
   }
 }))
 

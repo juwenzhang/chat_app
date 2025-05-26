@@ -5,7 +5,8 @@
   "type": "module",
   "main": "main.js",
   "scripts": {
-    "start": "nodemon main.js"
+    "start": "pm2 start main.js --name chat_app_backend",
+    "dev": "nodemon main.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,7 @@
   "packageManager": "pnpm@10.9.0",
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "body-parser": "^2.2.0",
     "cloudinary": "^2.6.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -21,6 +23,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.0",
     "multer": "^2.0.0",
+    "pm2": "^6.0.6",
     "socket.io": "^4.8.1"
   }
 }

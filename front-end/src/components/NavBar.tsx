@@ -5,11 +5,13 @@ import { LogOut, MessageSquare, Settings, User } from 'lucide-react';
 import AppLoading from '@/components/AppLoading';
 import AppError from '@/components/AppError';
 import { useAuthStore } from '@/store/useAuthStore';
+import useChatStore from '@/store/useChatStore';
 import { toast } from 'react-hot-toast';
 import { useTheme } from '@/context/themeContext';
 
 const NavBar: React.FC = () => {
   const { logout, authUser } = useAuthStore();
+  const { resetAll } = useChatStore();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -55,8 +57,12 @@ const NavBar: React.FC = () => {
         <div className='container mx-auto px-4 h-10 md:h-16 md:px-8'>
           <div className='flex items-center justify-between h-full flex-wrap md:flex-nowrap'>
             <div className='flex items-center gap-8'>
-              <Link to='/' className='flex items-center gap-2.5 
-                  hover:opacity-80 transition-all'>
+              <Link 
+                to='/' 
+                className='flex items-center gap-2.5 
+                  hover:opacity-80 transition-all'
+                onClick={() => {resetAll()}}  
+              >
                 <div className='size-9 rounded-lg bg-primary/10 
                   flex items-center justify-center'>
                   <MessageSquare className='w-5 h-5 text-primary' />

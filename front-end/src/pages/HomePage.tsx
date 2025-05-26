@@ -18,6 +18,7 @@ const HomePage: React.FC<HomePageProps> = (props: HomePageProps) => {
   const [startPosition, setStartPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   
+
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     setIsDragging(true);
