@@ -1,7 +1,7 @@
 import React from'react'
 import useChatStore from '@/store/useChatStore';
 import { useFetch } from '@/hooks/useFetch';
-import AppLoading from '@/components/AppLoading';
+// import AppLoading from '@/components/AppLoading';
 import AppError from '@/components/AppError';
 import ChatHeader from '@/components/ChatHeader';
 import ChatMessage from '@/components/ChatMessage';
@@ -16,12 +16,12 @@ interface ChatContainerProps {
 const ChatContainer: React.FC<ChatContainerProps> = () => {
   const { message, getMessages, isMessagesLoading, selectUser } = useChatStore()
 
-  const { isLoading, isError} = useFetch(
+  const { /*isLoading,*/ isError} = useFetch(
     "messages/fetch", 
     () => getMessages(selectUser._id), 
   )
 
-  if (isLoading) return <AppLoading/>
+  // if (isLoading) return <AppLoading/>
   if (isError) return <AppError/>
   if (isMessagesLoading) return (
     <div className='flex-1 flex flex-col overflow-auto'>

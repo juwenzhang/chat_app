@@ -23,6 +23,11 @@ body.light-theme {
     color: rgb(41, 40, 39);
   }
 
+  input[datatype='text'] {
+    background-color: #e6fafd;
+    color: rgb(41, 40, 39);
+  }
+
   button {
     background-color: #1e74d6;
     color: rgb(41, 40, 39);

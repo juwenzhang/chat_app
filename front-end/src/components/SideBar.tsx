@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import useChatStore from '@/store/useChatStore';
-import SideBarSkeletons from '@/components/SideBarSkeletons';
+// import SideBarSkeletons from '@/components/SideBarSkeletons';
 import { User } from 'lucide-react';
 import AppError from '@/components/AppError';
 import { useFetch } from '@/hooks/useFetch';
@@ -18,7 +18,7 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { users, selectUser, getUsers, setSelectUser, resetAll } = useChatStore();
-  const { isLoading, isError } = useFetch(
+  const { /*isLoading,*/ isError } = useFetch(
     'chat/users', 
     () => getUsers(), 
     { staleTime: 0 }
@@ -47,7 +47,7 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
     display: 'none', // 适用于 Chrome, Safari 和 Opera
   };
 
-  if (isLoading) return <SideBarSkeletons />;
+  // if (isLoading) return <SideBarSkeletons />;
   if (isError) return <AppError />;
 
   const handleClick = (user: any) => {
@@ -57,7 +57,8 @@ const SideBar: React.FC<SideBarProps> = (props: SideBarProps) => {
   return (
     <React.Fragment>
       <aside 
-        className='h-full w-20 lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200'
+        className='h-full w-20 lg:w-72 border-r border-base-300 
+          flex flex-col transition-all duration-200'
         style={{
           borderRight: '1px solid rgb(7, 8, 8)',
           boxSizing: 'border-box', 

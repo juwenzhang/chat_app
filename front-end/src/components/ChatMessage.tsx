@@ -8,6 +8,7 @@ interface ChatMessageProps {
 
 const ChatMessage: React.FC<ChatMessageProps> = (props: ChatMessageProps) => {
   const { message } = props;
+  // console.log(message);
   return (
     <React.Fragment>
       hello world 

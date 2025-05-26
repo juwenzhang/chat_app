@@ -20,9 +20,9 @@ function getLazyComponent(path: string, props: any) {
 
 const App: React.FC<AppProps> = (props: AppProps) => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
-  const { isError, isLoading } = useFetch("auth/check", checkAuth, {});
+  const { isError, /*isLoading*/ } = useFetch("auth/check", checkAuth, {});
 
-  if (isLoading) return <AppLoading />;
+  // if (isLoading) return <AppLoading />;
   if (isError) return <AppError />;
   if (isCheckingAuth && !authUser) return <AppLoading />;
   const { theme } = props;

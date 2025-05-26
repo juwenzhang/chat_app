@@ -24,19 +24,18 @@ app.use(bodyParser.urlencoded({
 
 const allowedOrigins = ['http://localhost:5173'];
 app.use(cors({
-  origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: "GET,POST,PUT,DELETE",
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
-  allowedHeaders: "Content-Type, Authorization",
-  optionsSuccessStatus: 200,
-  preflightContinue: false,
-}))
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200
+}));
 
 app.use("/api/auth", AuthRouter);
 app.use("/api/message", MessageRouter);

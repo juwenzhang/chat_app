@@ -14,44 +14,70 @@ export const AuthSignup = async (req, res) => {
   console.log("signup req.body: ", req.body)
   try {
     if (!fullName || !email || !password) {
-      return res.status(400).json({ message: "please fill in all fields" });
+      return res.status(400).json({ 
+        message: "please fill in all fields" 
+      });
     }
     // generate hash password, and save it into database
     if (password.length < 6) {
-      return res.status(400).json({ message: "password must be at least 6 characters" });
+      return res.status(400).json({ 
+        message: "password must be at least 6 characters" 
+      });
     }
     // get user, if user exist, return error message, if not, create new user
     const user = await UserModel.findOne({ email });  
-    if (user) return res.status(400).json({ message: "user already exist" });
+    if (user) return res.status(400).json({ 
+      message: "user already exist" 
+    });
     
     // get salt to exec generatoring hash password
     const salt = await bcrypt.genSalt(10);  // 对称加密
     const hashPassword = await bcrypt.hash(password, salt);
 
     // create new user
-    const newUser = new UserModel({ fullName, email, password: hashPassword });
+    const newUser = new UserModel({ 
+      fullName, 
+      email, 
+      password: hashPassword 
+    });
     if (newUser) {
       // generate jwt token to front-end to use
       // const token = generateToken(newUser._id, res);
       await newUser.save();  // save new user to database
-      return res.status(201).json({ message: "user created successfully", status: "ok"/*token*/ });  
+      return res.status(201).json({ 
+        message: "user created successfully", 
+        status: "ok"/*token*/ 
+      });  
     }
   } catch (error) {
-    console.log("signup error: ", error.message || "internal server error")
-    return res.status(500).json({ message: "internal server error", status: "no" });
+    console.log(
+      "signup error: ", 
+      error.message 
+      || "internal server error"
+    )
+    return res.status(500).json({ 
+      message: "internal server error", 
+      status: "no" 
+    });
   }
 }
 
 export const AuthLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
-    if (!email || !password) return res.status(400).json({ message: "please fill in all fields" });
+    if (!email || !password) return res.status(400).json({ 
+      message: "please fill in all fields" 
+    });
     
     const user = await UserModel.findOne({ email });  // get user from database
-    if (!user) return res.status(400).json({ message: "user not found" });
+    if (!user) return res.status(400).json({ 
+      message: "user not found" 
+    });
 
     const isMatch = await bcrypt.compare(password, user.password)
-    if (!isMatch) return res.status(400).json({ message: "invalid credentials" });
+    if (!isMatch) return res.status(400).json({ 
+      message: "invalid credentials" 
+    });
     
     const token = generateToken(user._id, res);
     return res.status(200).json({ 
@@ -66,30 +92,50 @@ export const AuthLogin = async (req, res) => {
       status: "ok"
     });
   } catch (error) {
-    console.log("login error: ", error.message || "internal server error")
-    return res.status(500).json({ message: "internal server error", status: "no" });
+    console.log(
+      "login error: ", 
+      error.message 
+      || "internal server error"
+    )
+    return res.status(500).json({ 
+      message: "internal server error", 
+      status: "no" 
+    });
   }  
 }
 
 export const AuthLogout = (req, res) => {
   try {
     res.cookie("jwt", "", { maxAge: 0 });  // clear cookie from front-end
-    return res.status(200).json({ message: "logout successfully", status: "ok" });
+    return res.status(200).json({ 
+      message: "logout successfully", 
+      status: "ok" 
+    });
   } catch (error) {
-    console.log("logout error: ", error.message || "internal server error")
-    return res.status(500).json({ message: "internal server error", status: "no" });  
+    console.log(
+      "logout error: ", 
+      error.message 
+      || "internal server error"
+    )
+    return res.status(500).json({ 
+      message: "internal server error", 
+      status: "no" 
+    });  
   }
 }
 
 export const AuthUploadProfile = async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ message: "please upload profile picture" });
+    if (!req.file) return res.status(400).json({ 
+      message: "please upload profile picture" 
+    });
     const user_id = req.user._id;
     try {
       console.log('尝试上传到 Cloudinary，使用文件 buffer');
       const uploadResponse = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream({
-          resource_type: 'auto'
+          resource_type: 'auto',
+          folder: 'profile_pics'
         }, (error, result) => {
           if (error) {
             reject(error);
@@ -136,20 +182,41 @@ export const AuthUploadProfile = async (req, res) => {
         });
       } catch (backupError) {
         console.log("本地备份失败: ", backupError.message);
-        res.status(503).json({ message: "所有存储服务暂时不可用，请稍后重试", status: "no"  });
+        res.status(503).json({ 
+          message: "所有存储服务暂时不可用，请稍后重试", 
+          status: "no"  
+        });
       }
     }
   } catch (error) {
-    console.log("upload profile error: ", error.message || "internal server error")
-    return res.status(500).json({ message: "internal server error", status: "no" });
+    console.log(
+      "upload profile error: ", 
+      error.message 
+      || "internal server error"
+    )
+    return res.status(500).json({ 
+      message: "internal server error", 
+      status: "no" 
+    });
   }
 }
 
 export const AuthCheck = async (req, res) => {
   try {
-    res.status(200).json({ message: "check successfully", user: req.user, status: "ok" });
+    res.status(200).json({ 
+      message: "check successfully", 
+      user: req.user, 
+      status: "ok" 
+    });
   } catch (error) {
-    console.log("check error: ", error.message || "internal server error")
-    return res.status(500).json({ message: "internal server error", status: "no" });
+    console.log(
+      "check error: ", 
+      error.message 
+      || "internal server error"
+    )
+    return res.status(500).json({ 
+      message: "internal server error", 
+      status: "no" 
+    });
   }
 }
