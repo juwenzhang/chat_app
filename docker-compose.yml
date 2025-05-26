@@ -1,0 +1,37 @@
+# ... existing code ...
+services:
+  backend:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/chat_app_node
+      - PORT=3000
+      - JWT_SECRET=secret_key
+      - NODE_ENV=production
+      - CLOUDINARY_CLOUD_NAME=dnbng7ik2
+      - CLOUDINARY_API_KEY=193717469339923
+      - CLOUDINARY_API_SECRET=xXNL2hrd2Il20VOFGH9ar49cCq0
+    depends_on:
+      - mongo
+
+  frontend:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
